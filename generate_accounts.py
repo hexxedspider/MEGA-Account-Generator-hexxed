@@ -1,6 +1,3 @@
-# Create New Mega Accounts
-# saves credentials to a file called accounts.csv
-
 import requests
 import subprocess
 import os
@@ -16,7 +13,6 @@ from pymailtm.pymailtm import CouldNotGetAccountException, CouldNotGetMessagesEx
 from faker import Faker
 fake = Faker()
 
-# Custom function for checking if the argument is below a certain value
 def check_limit(value):
     ivalue = int(value)
     if ivalue <= 8:
@@ -24,7 +20,6 @@ def check_limit(value):
     else:
         raise argparse.ArgumentTypeError(f"You cannot use more than 8 threads.")
 
-# set up command line arguments
 parser = argparse.ArgumentParser(description="Create New Mega Accounts")
 parser.add_argument(
     "-n",
@@ -67,7 +62,6 @@ class MegaAccount:
         self.password = password
 
     def generate_mail(self):
-        """Generate mail.tm account and return account credentials."""
         for i in range(5):
             try:
                 mail = pymailtm.MailTm()
@@ -91,7 +85,6 @@ class MegaAccount:
         self.email_password = acc.password
 
     def get_mail(self):
-        """Get the latest email from the mail.tm account"""
         while True:
             try:
                 mail = pymailtm.Account(self.email_id, self.email, self.email_password)
@@ -105,12 +98,9 @@ class MegaAccount:
         return messages[0]
 
     def register(self):
-        # Generate mail.tm account and return account credentials.
         self.generate_mail()
 
         print(f"\r> [{self.email}]: Registering account...", end="\033[K", flush=True)
-
-        # begin resgistration
         registration = subprocess.run(
             [
                 "megatools",
@@ -134,7 +124,6 @@ class MegaAccount:
         return self.email
 
     def verify(self):
-        # check if there is mail
         confirm_message = None
         for i in range(5):
             confirm_message = self.get_mail()
@@ -144,16 +133,13 @@ class MegaAccount:
             print(f"\r> [{self.email}]: Waiting for verification email... ({i+1} of 5)", end="\033[K", flush=True)
             time.sleep(5)
 
-        # get verification link
-        if confirm_message is None:
+        if confirm_message is None: 
             print(f"\r> [{self.email}]: Failed to verify account. There was no verification email. Please open an issue on github.", end="\033[K", flush=True)
             exit()
 
         links = find_url(confirm_message.text)
-
         self.verify_command = str(self.verify_command).replace("@LINK@", links[0])
 
-        # perform verification
         verification = subprocess.run(
             self.verify_command,
             shell=True,
@@ -165,10 +151,8 @@ class MegaAccount:
             print(f"\r> [{self.email}] Successefully registered and verified.", end="\033[K", flush=True)
             print(f"\n{self.email} - {self.password}")
 
-            # save to file
             with open("accounts.csv", "a", newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
-                # last column is for purpose (to be edited manually if required)
                 csvwriter.writerow([self.email, self.password, "-", self.email_password, self.email_id, "-"])
         else:
             print("Failed to verify account. Please open an issue on github.")
@@ -186,20 +170,16 @@ def new_account():
 
 
 if __name__ == "__main__":
-    # Check if CSV file exists, and if not create it and add header
     if not os.path.exists("accounts.csv"):
         with open("accounts.csv", "w") as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(["Email", "MEGA Password", "Usage", "Mail.tm Password", "Mail.tm ID", "Purpose"])
-
-    # Check if CSV file is using the correct format
     with open("accounts.csv") as csvfile:
         csvreader = csv.reader(csvfile)
         if next(csvreader) != ["Email", "MEGA Password", "Usage", "Mail.tm Password", "Mail.tm ID", "Purpose"]:
             print("CSV file is not in the correct format. Please use the convert_csv.py script to convert it.")
             exit()
     
-    # Parse arguments and generate accounts accordingly
     if args.threads:
         print(f"Generating {args.number} accounts using {args.threads} threads.")
         threads = []

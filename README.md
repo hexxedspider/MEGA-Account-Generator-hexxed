@@ -6,26 +6,9 @@
 
 <h4 align="center">An Open Source demonstration of creating / managing multiple  <a href="https://mega.nz" target="_blank">MEGA.nz</a> accounts.</h4>
 
-<br>
+<h6 align="center">I have no affiliation with MEGA.nz, and this is not an official MEGA.nz product. You are solely responsible what you do.</h6>
 
-<p align="center">
-  <!--License-->
-  <a href="https://github.com/f-o/MEGA-Account-Generator/blob/master/LICENSE">
-      <img src="https://img.shields.io/github/license/f-o/MEGA-Account-Generator">
-  </a>
-  <!--Contributions-->
-  <a href="https://github.com/f-o/MEGA-Account-Generator/graphs/contributors" alt="Contributors">
-      <img src="https://img.shields.io/github/contributors/f-o/MEGA-Account-Generator" />
-  </a>
-  <!--Stars-->
-  <a href="https://github.com/f-o/MEGA-Account-Generator/stargazers">
-      <img src="https://img.shields.io/github/stars/f-o/MEGA-Account-Generator">
-  </a>
-  <!--Donate-->
-  <a href="#support">
-    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
-  </a>
-</p>
+<br>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -42,10 +25,13 @@
 
 ## Key Features
 
-* Generate new MEGA.nz accounts in bulk
-* Automatically verify emails
-* Fetch information about available storage
-* Keep accounts alive by logging in periodically
+* Generate new MEGA.nz accounts in bulk.
+* Automatically verify emails.
+* **Check storage usage** for all accounts and display total storage.
+* **Automated weekly login scheduler** to keep accounts alive.
+* **Tag/organize accounts** with customizable purposes.
+* Keep accounts alive by logging in periodically.
+* Sift through accounts and copy email, password, or both to clipboard.
 
 <br>
 
@@ -57,60 +43,48 @@
 
 **Installation:**
 ```bash
-# Clone this repository
-$ git clone https://github.com/f-o/MEGA-Account-Generator.git
-# Go into the repository
-$ cd MEGA-Account-Generator
-# Install dependencies
-$ pip install -r requirements.txt
+git clone https://github.com/hexxedspider/MEGA-Account-Generator.git
+cd MEGA-Account-Generator
+pip install -r requirements.txt
 ```
 
 **Usage:**
 ```bash
-# Create new accounts
-$ python generate_accounts.py
-# Sign in to accounts to keep them alive
-$ python signin_accounts.py
+python generate_accounts.py
+python signin_accounts.py
+python check_storage.py
+python manage_tags.py
+python account_selector.py
 ```
 
 <details><summary>Click here for Advanced Usage</summary>
 
 ```bash
-# Create new accounts with arguments
-$ python generate_accounts.py [-h] [-n NUMBER_OF_ACCOUNTS] [-t NUMBER_OF_THREADS] [-p PASSWORD]
-# Sign in to accounts to keep them alive
-$ python signin_accounts.py
-# Convert old CSV file to new format
-$ python convert_csv.py [-h] [-i INPUT_FILE]
+python generate_accounts.py [-h] [-n NUMBER_OF_ACCOUNTS] [-t NUMBER_OF_THREADS] [-p PASSWORD]
+python signin_accounts.py
+python check_storage.py
+python setup_scheduler.py [--remove]
+python manage_tags.py
+python account_selector.py
 ```
 
-- `-n` Number of new accounts to generate. If not specified, 3 accounts will be generated.
-- `-t` Number of threads to use for concurrent account creation. Maximum of 8.
-- `-p` Password to use for all accounts. If not specified, a random password will be generated for each account.
+**generate_accounts.py**:
+- `-n` Number of new accounts to generate. Default: 3 accounts.
+- `-t` Number of threads for concurrent account creation. Maximum: 8.
+- `-p` Password to use for all accounts. Default: random password per account.
 - `-h` Show help.
+
+**signin_accounts.py**: Log into all accounts to keep them alive and prevent deletion.
+
+**check_storage.py**: Check storage usage for all accounts, display total storage across all accounts, and update CSV with usage data.
+
+**setup_scheduler.py**: Set up a Windows scheduled task to automatically run `signin_accounts.py` weekly. Use `--remove` flag to uninstall the scheduled task.
+
+**manage_tags.py**: Interactive CLI to tag/organize accounts by purpose. Tag accounts, filter by purpose, and view grouped accounts.
+
+**account_selector.py**: Browse accounts and copy email, password, or both (email:password format) to clipboard. Shows account metadata including purpose and storage usage.
 
 </details>
-
-<br>
-
-## Convert old CSV file to new format
-
-**What's this?**
-
-As of May 2024, the script has updated to use a new format for the CSV file. This means that the CSV file (`accounts.csv`) will be easier to use in the future.<br>
-Unfortunately the old format is not supported any more, so you will need to convert it to the new format.<br>
-You will need to convert the old CSV file **only if you have accounts in the ``accounts.csv`` file from before May 2024**.
-
-
-**Usage:**
-
-```bash
-# Convert old CSV file to new format
-$ python convert_csv.py [-h] [-i INPUT_FILE]
-```
-
-- `-i` Path to the input CSV file. If not specified, `accounts.csv` will be used.
-- `-h` Show help.
 
 <br>
 
@@ -145,8 +119,7 @@ $ python convert_csv.py [-h] [-i INPUT_FILE]
   - We do not want to overload their service, which they generously offer for free.
 
 - Something is broken? I'm having trouble using this script.
-  - Please [open an issue on GitHub](https://github.com/f-o/MEGA-Account-Generator/issues). Be sure to include information and screenshots.
-
+  - Please [open an issue on GitHub](https://github.com/hexxedspider/MEGA-Account-Generator/issues). Be sure to include information and screenshots.
 
 <br>
 
@@ -155,12 +128,13 @@ $ python convert_csv.py [-h] [-i INPUT_FILE]
 This software was based heavily on [IceWreck/MegaScripts](https://github.com/IceWreck/MegaScripts).<br>
 His original Python script utilized [GuerillaMail](https://www.guerrillamail.com/GuerrillaMailAPI.html) to generate temporary email addresses.<br>
 I've modified the script to use [Mail.tm](https://api.mail.tm/) instead, with a lot of help from [qtchaos/py_mega_account_generator](https://github.com/qtchaos/py_mega_account_generator).<br>
-I highly recommend checking out both of their projects.
+I highly recommend checking out both of their projects.<br><br>
+This script was forked from f-o, so majority of the code is from them.
 
 
 ## Support
-This project is free and open source.<br>
-If you find it useful, please consider supporting the project by donating.
+The original script was created by [f-o](https://github.com/f-o), and I only forked and added to it.<br>
+If you find it useful, please consider supporting Fox by donating below.
 <br><br>
 <a href="https://www.buymeacoffee.com/foxdk" target="_blank"><img src="./img/bmc-button.png" alt="Buy Me A Coffee" width="160"></a>
 
@@ -191,5 +165,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-> [@f-o](https://github.com/f-o) &nbsp;&middot;&nbsp;
-> [soon.to](https://soon.to)
+> [@hexxedspider](https://github.com/hexxedspider) &nbsp;·&nbsp;
+> [@f-o](https://github.com/f-o)
