@@ -46,8 +46,8 @@
 
 **Installation:**
 ```bash
-git clone https://github.com/hexxedspider/MEGA-Account-Generator.git
-cd MEGA-Account-Generator
+git clone https://github.com/hexxedspider/MEGA-Account-Generator-hexxed.git
+cd MEGA-Account-Generator-hexxed
 pip install -r requirements.txt
 ```
 
@@ -130,7 +130,7 @@ python account_selector.py
   - We do not want to overload their service, which they generously offer for free.
 
 - Something is broken? I'm having trouble using this script.
-  - Please [open an issue on GitHub](https://github.com/hexxedspider/MEGA-Account-Generator/issues). Be sure to include information and screenshots.
+  - Please [open an issue on GitHub](https://github.com/hexxedspider/MEGA-Account-Generator-hexxed/issues). Be sure to include information and screenshots.
 
 <br>
 
