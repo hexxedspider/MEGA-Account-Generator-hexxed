@@ -2,6 +2,7 @@ import csv
 import subprocess
 import re
 import os
+import time
 
 def parse_storage_output(output):
     lines = output.strip().split('\n')
@@ -13,6 +14,20 @@ def parse_storage_output(output):
                 total = parts[1].strip()
                 return used, total
     return None, None
+
+def normalize_size_str(size_str):
+    """Ensure there is a space between value and unit (e.g. '50GB' -> '50 GB')"""
+    if not size_str:
+        return size_str
+    
+    # Check if it already has space
+    if ' ' in size_str:
+        return size_str
+        
+    match = re.match(r'([\d.]+)([KMGT]?B)', size_str)
+    if match:
+        return f"{match.group(1)} {match.group(2)}"
+    return size_str
 
 def convert_to_bytes(size_str):
     size_str = size_str.strip().upper()
@@ -73,6 +88,10 @@ def check_storage():
         
         print(f"[{idx}/{len(accounts)}] Checking {email}...", end=' ', flush=True)
         
+        # Add delay to avoid rate limits
+        if idx > 1:
+            time.sleep(2)
+        
         try:
             result = subprocess.run(
                 ['megatools', 'df', '-u', email, '-p', password],
@@ -89,7 +108,7 @@ def check_storage():
                     total_bytes = convert_to_bytes(total)
                     percentage = (used_bytes / total_bytes * 100) if total_bytes > 0 else 0
                     
-                    usage_str = f"{used}/{total} ({percentage:.1f}%)"
+                    usage_str = f"{normalize_size_str(used)}/{normalize_size_str(total)} ({percentage:.1f}%)"
                     account['Usage'] = usage_str
                     
                     total_used_bytes += used_bytes
@@ -102,7 +121,9 @@ def check_storage():
                     print("Could not parse storage info")
             else:
                 account['Usage'] = "Login failed"
-                print("Authentication failed")
+                print(f"Authentication failed (Code: {result.returncode})")
+                if result.stderr:
+                    print(f"  Details: {result.stderr.strip()}")
                 
         except subprocess.TimeoutExpired:
             account['Usage'] = "Timeout"

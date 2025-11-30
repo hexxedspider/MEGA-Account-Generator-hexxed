@@ -25,9 +25,12 @@
 
 ## Key Features
 
+* **Unified Manager with Beautiful TUI** - Single dashboard for all operations with rich UI.
 * Generate new MEGA.nz accounts in bulk.
 * Automatically verify emails.
 * **Check storage usage** for all accounts and display total storage.
+* **Browse and download files** from accounts without interfering with auto-login.
+* **Upload folders** to selected accounts using megatools.
 * **Automated weekly login scheduler** to keep accounts alive.
 * **Tag/organize accounts** with customizable purposes.
 * Keep accounts alive by logging in periodically.
@@ -48,13 +51,21 @@ cd MEGA-Account-Generator
 pip install -r requirements.txt
 ```
 
-**Usage:**
+**Quick Start (Recommended):**
+```bash
+python mega_manager.py
+```
+The unified manager provides an interactive menu with all features accessible from one place!
+
+**Individual Scripts:**
 ```bash
 python generate_accounts.py
 python signin_accounts.py
 python check_storage.py
 python manage_tags.py
 python account_selector.py
+python upload_folder.py
+python browse_files.py
 ```
 
 <details><summary>Click here for Advanced Usage</summary>
